@@ -1,0 +1,423 @@
+task0 least_local_ratio is9
+task 0： least local ratio = 9 task memory = 1111 task SLA latency = 11.0
+task1 least_local_ratio is2
+task 1： least local ratio = 2 task memory = 1260 task SLA latency = 18.0
+task2 least_local_ratio is3
+task 2： least local ratio = 3 task memory = 1850 task SLA latency = 17.0
+task3 least_local_ratio is1
+task 3： least local ratio = 1 task memory = 1835 task SLA latency = 19.0
+task4 least_local_ratio is5
+task 4： least local ratio = 5 task memory = 1875 task SLA latency = 15.0
+task5 least_local_ratio is8
+task 5： least local ratio = 8 task memory = 1087 task SLA latency = 12.0
+task6 least_local_ratio is4
+task 6： least local ratio = 4 task memory = 1588 task SLA latency = 16.0
+task7 least_local_ratio is2
+task 7： least local ratio = 2 task memory = 1290 task SLA latency = 18.0
+task8 least_local_ratio is0
+task 8： least local ratio = 0 task memory = 1536 task SLA latency = 20.0
+task9 least_local_ratio is2
+task 9： least local ratio = 2 task memory = 1380 task SLA latency = 18.0
+task10 least_local_ratio is9
+task 10： least local ratio = 9 task memory = 1369 task SLA latency = 11.0
+task11 least_local_ratio is5
+task 11： least local ratio = 5 task memory = 1145 task SLA latency = 15.0
+task12 least_local_ratio is4
+task 12： least local ratio = 4 task memory = 1256 task SLA latency = 16.0
+task13 least_local_ratio is9
+task 13： least local ratio = 9 task memory = 1477 task SLA latency = 11.0
+task14 least_local_ratio is0
+task 14： least local ratio = 0 task memory = 1512 task SLA latency = 20.0
+task15 least_local_ratio is1
+task 15： least local ratio = 1 task memory = 1072 task SLA latency = 19.0
+task16 least_local_ratio is9
+task 16： least local ratio = 9 task memory = 1385 task SLA latency = 11.0
+task17 least_local_ratio is1
+task 17： least local ratio = 1 task memory = 1351 task SLA latency = 19.0
+task18 least_local_ratio is5
+task 18： least local ratio = 5 task memory = 1127 task SLA latency = 15.0
+task19 least_local_ratio is5
+task 19： least local ratio = 5 task memory = 1856 task SLA latency = 15.0
+--------------------------------- worst allocate Start-----------------------------------------------
+task 0： fixed_mce =  111.10000000000002
+task 10： fixed_mce =  136.89999999999986
+task 16： fixed_mce =  138.5
+task 13： fixed_mce =  147.70000000000005
+task 5： fixed_mce =  217.39999999999998
+task 18： fixed_mce =  563.5
+task 11： fixed_mce =  572.5
+task 12： fixed_mce =  753.5999999999999
+task 19： fixed_mce =  928.0
+task 4： fixed_mce =  937.5
+task 6： fixed_mce =  952.8
+task 15： fixed_mce =  964.8
+task 1： fixed_mce =  1008.0
+task 7： fixed_mce =  1032.0
+task 9： fixed_mce =  1104.0
+task 17： fixed_mce =  1215.9
+task 2： fixed_mce =  1295.0
+task 14： fixed_mce =  1512.0
+task 8： fixed_mce =  1536.0
+task 3： fixed_mce =  1651.5
+full match : Server 0 has 3000 memory to hold task 0
+sever 0 add task 0, server.memory is 1889 sever mce = 2000.1
+sever id = 0 has 1 tasks, sever mce = 2000.1
+
+full match : Server 0 has 1889 memory to hold task 10
+sever 0 add task 10, server.memory is 520 sever mce = 767.9999999999999
+sever id = 0 has 2 tasks, sever mce = 767.9999999999999
+
+full match : Server 1 has 3000 memory to hold task 16
+sever 1 add task 16, server.memory is 1615 sever mce = 1753.5
+sever id = 1 has 1 tasks, sever mce = 1753.5
+
+full match : Server 1 has 1615 memory to hold task 13
+sever 1 add task 13, server.memory is 138 sever mce = 424.20000000000005
+sever id = 1 has 2 tasks, sever mce = 424.20000000000005
+
+full match : Server 2 has 3000 memory to hold task 5
+sever 2 add task 5, server.memory is 1913 sever mce = 2130.4
+sever id = 2 has 1 tasks, sever mce = 2130.4
+
+full match : Server 2 has 1913 memory to hold task 18
+sever 2 add task 18, server.memory is 786 sever mce = 1566.9
+sever id = 2 has 2 tasks, sever mce = 1566.9
+
+full match : Server 3 has 3000 memory to hold task 11
+sever 3 add task 11, server.memory is 1855 sever mce = 2427.5
+sever id = 3 has 1 tasks, sever mce = 2427.5
+
+full match : Server 3 has 1855 memory to hold task 12
+sever 3 add task 12, server.memory is 599 sever mce = 1925.1
+sever id = 3 has 2 tasks, sever mce = 1925.1
+
+full match : Server 4 has 3000 memory to hold task 19
+sever 4 add task 19, server.memory is 1144 sever mce = 2072.0
+sever id = 4 has 1 tasks, sever mce = 2072.0
+
+full match : Server 4 has 1144 memory to hold task 15
+sever 4 add task 15, server.memory is 72 sever mce = 1964.8
+sever id = 4 has 2 tasks, sever mce = 1964.8
+
+
+press sever 2 current tasks to leastlocalmemory
+add  task 4 to Server 2 server rest memory is 629.4000000000001
+
+press sever 0 current tasks to leastlocalmemory
+add  task 6 to Server 0 server rest memory is 132.79999999999984
+
+press sever 1 current tasks to leastlocalmemory
+add  task 1 to Server 1 server rest memory is 172.20000000000005
+
+add  task 7 to Server 2 server rest memory is 371.4000000000001
+
+add  task 9 to Server 2 server rest memory is 95.40000000000009
+
+add  task 17 to Server 1 server rest memory is 37.10000000000005
+
+add  task 2 to Server 3 server rest memory is 44.0
+
+add  task 14 to Server 0 server rest memory is 132.79999999999984
+
+add  task 8 to Server 0 server rest memory is 132.79999999999984
+
+press sever 3 current tasks to leastlocalmemory
+add  task 3 to Server 3 server rest memory is 2481.6
+
+Sever id: 0; localMem:132.79999999999984; mce:132.79999999999984
+Task id: 0; memory:1111; localMem:999.9; mce:0.0; hfm:0.0
+Task id: 10; memory:1369; localMem:1232.1000000000001; mce:0.0; hfm:0.0
+Task id: 6; memory:1588; localMem:635.2; mce:0.0; hfm:0.0
+Task id: 14; memory:1512; localMem:0.0; mce:0.0; hfm:0.0
+Task id: 8; memory:1536; localMem:0.0; mce:0.0; hfm:0.0
+
+Sever id: 1; localMem:37.10000000000005; mce:37.10000000000005
+Task id: 16; memory:1385; localMem:1246.5; mce:0.0; hfm:0.0
+Task id: 13; memory:1477; localMem:1329.3; mce:0.0; hfm:0.0
+Task id: 1; memory:1260; localMem:252.0; mce:0.0; hfm:0.0
+Task id: 17; memory:1351; localMem:135.1; mce:0.0; hfm:0.0
+
+Sever id: 2; localMem:95.40000000000009; mce:95.40000000000009
+Task id: 5; memory:1087; localMem:869.6; mce:0.0; hfm:0.0
+Task id: 18; memory:1127; localMem:563.5; mce:0.0; hfm:0.0
+Task id: 4; memory:1875; localMem:937.5; mce:0.0; hfm:0.0
+Task id: 7; memory:1290; localMem:258.0; mce:0.0; hfm:0.0
+Task id: 9; memory:1380; localMem:276.0; mce:0.0; hfm:0.0
+
+Sever id: 3; localMem:2481.6; mce:2481.6
+Task id: 11; memory:1145; localMem:572.5; mce:0.0; hfm:0.0
+Task id: 12; memory:1256; localMem:502.40000000000003; mce:0.0; hfm:0.0
+Task id: 2; memory:1850; localMem:555.0; mce:0.0; hfm:0.0
+Task id: 3; memory:1835; localMem:183.5; mce:0.0; hfm:0.0
+
+Sever id: 4; localMem:72; mce:1964.8
+Task id: 19; memory:1856; localMem:1856; mce:928.0; hfm:0.0
+Task id: 15; memory:1072; localMem:1072; mce:964.8; hfm:0.0
+--------------------------------- Worst Match Start-----------------------------------------------
+
+Sever id: 0; localMem:-7.105427357601002e-15; mce:132.7999999999999
+Task id: 0; memory:1111; localMem:1026.46; mce:26.56000000000006
+Task id: 10; memory:1369; localMem:1258.66; mce:26.559999999999945
+Task id: 6; memory:1588; localMem:661.76; mce:26.559999999999945
+Task id: 14; memory:1512; localMem:26.559999999999967; mce:26.559999999999967
+Task id: 8; memory:1536; localMem:26.559999999999967; mce:26.559999999999967
+
+Sever id: 1; localMem:0.0; mce:37.10000000000022
+Task id: 16; memory:1385; localMem:1255.775; mce:9.275000000000091
+Task id: 13; memory:1477; localMem:1338.575; mce:9.275000000000091
+Task id: 1; memory:1260; localMem:261.27500000000003; mce:9.275000000000034
+Task id: 17; memory:1351; localMem:144.375; mce:9.275000000000006
+
+Sever id: 2; localMem:0.0; mce:95.4000000000002
+Task id: 5; memory:1087; localMem:888.6800000000001; mce:19.08000000000004
+Task id: 18; memory:1127; localMem:582.58; mce:19.08000000000004
+Task id: 4; memory:1875; localMem:956.58; mce:19.08000000000004
+Task id: 7; memory:1290; localMem:277.08000000000004; mce:19.08000000000004
+Task id: 9; memory:1380; localMem:295.08000000000004; mce:19.08000000000004
+
+Sever id: 3; localMem:-2.2737367544323206e-13; mce:2481.6
+Task id: 11; memory:1145; localMem:1192.9; mce:620.4000000000001
+Task id: 12; memory:1256; localMem:1122.8; mce:620.3999999999999
+Task id: 2; memory:1850; localMem:1175.4; mce:620.4000000000001
+Task id: 3; memory:1835; localMem:803.9; mce:620.4
+
+Sever id: 4; localMem:72; mce:1964.8
+Task id: 19; memory:1856; localMem:1856; mce:928.0
+Task id: 15; memory:1072; localMem:1072; mce:964.8
+
+--------------------------------- Worst Inner Start-----------------------------------------------
+
+Sever id: 0; localMem:106.2399999999999; mce:132.7999999999998
+Task id: 0; memory:1111; localMem:1012.7064524121131; mce:12.806452412113117
+Task id: 10; memory:1369; localMem:1242.4929646675369; mce:10.392964667536717
+Task id: 6; memory:1588; localMem:636.6932796630833; mce:1.4932796630832854
+Task id: 14; memory:1512; localMem:0.9410032162604319; mce:0.9410032162604319
+Task id: 8; memory:1536; localMem:0.9263000410063627; mce:0.9263000410063627
+
+Sever id: 1; localMem:27.825000000000042; mce:37.10000000000005
+Task id: 16; memory:1385; localMem:1250.7370563065876; mce:4.237056306587647
+Task id: 13; memory:1477; localMem:1333.2731367533; mce:3.9731367532999684
+Task id: 1; memory:1260; localMem:252.58217489926824; mce:0.5821748992682387
+Task id: 17; memory:1351; localMem:135.58263204084415; mce:0.4826320408441518
+
+Sever id: 2; localMem:76.32000000000008; mce:95.4
+Task id: 5; memory:1087; localMem:879.0209402542807; mce:9.420940254280708
+Task id: 18; memory:1127; localMem:567.1346271717491; mce:3.6346271717491163
+Task id: 4; memory:1875; localMem:939.6846532386993; mce:2.1846532386992976
+Task id: 7; memory:1290; localMem:259.9846050496905; mce:1.984605049690515
+Task id: 9; memory:1380; localMem:277.8551742855803; mce:1.85517428558029
+
+Sever id: 3; localMem:1861.1999999999996; mce:2481.5999999999995
+Task id: 11; memory:1145; localMem:815.9443528789446; mce:243.44435287894464
+Task id: 12; memory:1256; localMem:687.3414703067886; mce:184.94147030678852
+Task id: 2; memory:1850; localMem:662.6230826433945; mce:107.62308264339447
+Task id: 3; memory:1835; localMem:267.8910941708724; mce:84.3910941708724
+
+Sever id: 4; localMem:72; mce:1964.8
+Task id: 19; memory:1856; localMem:1856; mce:928.0
+Task id: 15; memory:1072; localMem:1072; mce:964.8
+
+--------------------------------- Worst Inter Start-----------------------------------------------
+
+Sever id: 0; localMem:106.2399999999999; farMem:809.54; mce:942.3399999999998
+Task id: 0; memory:1111; localMem:1012.7064524121131; farMem:390.33642641950695; mce:403.14287883162007; est_latency:10.882960940528445
+Task id: 10; memory:1369; localMem:1242.4929646675369; farMem:316.77411961437014; mce:327.16708428190685; est_latency:10.92223536349012
+Task id: 6; memory:1588; localMem:636.6932796630833; farMem:45.51466936944504; mce:47.00794903252832; est_latency:15.99002324306156
+Task id: 14; memory:1512; localMem:0.9410032162604319; farMem:28.681466253443936; mce:29.622469469704367; est_latency:19.993397049280624
+Task id: 8; memory:1536; localMem:0.9263000410063627; farMem:28.233318343233876; mce:29.15961838424024; est_latency:19.993601779442088
+
+Sever id: 1; localMem:27.825000000000042; farMem:905.2399999999998; mce:942.3399999999999
+Task id: 16; memory:1385; localMem:1250.7370563065876; farMem:413.5366955229593; mce:417.77375182954694; est_latency:10.967468720621115
+Task id: 13; memory:1477; localMem:1333.2731367533; farMem:387.7781471220708; mce:391.75128387537075; est_latency:10.971153754368352
+Task id: 1; memory:1260; localMem:252.58217489926824; farMem:56.82027016858122; mce:57.402445067849456; est_latency:17.994477655241216
+Task id: 17; memory:1351; localMem:135.58263204084415; farMem:47.10488718638857; mce:47.58751922723272; est_latency:18.995730260435096
+
+Sever id: 2; localMem:76.32000000000008; farMem:846.9399999999998; mce:942.3399999999997
+Task id: 5; memory:1087; localMem:879.0209402542807; farMem:418.18507017612774; mce:427.60601043040845; est_latency:11.9095041547951
+Task id: 18; memory:1127; localMem:567.1346271717491; farMem:161.33706167930816; mce:164.97168885105728; est_latency:14.964886412643217
+Task id: 4; memory:1875; localMem:939.6846532386993; farMem:96.97432987337618; mce:99.15898311207548; est_latency:14.987314123208273
+Task id: 7; memory:1290; localMem:259.9846050496905; farMem:88.09441303904084; mce:90.07901808873136; est_latency:17.983249659877753
+Task id: 9; memory:1380; localMem:277.8551742855803; farMem:82.34912523214687; mce:84.20429951772716; est_latency:17.98536324249242
+
+Sever id: 3; localMem:321.9399999999998; farMem:-1539.2599999999998; mce:942.3399999999999
+Task id: 11; memory:1145; localMem:815.9443528789446; farMem:0; mce:243.44435287894464; est_latency:12.873848446472092
+Task id: 12; memory:1256; localMem:687.3414703067886; farMem:0; mce:184.94147030678852; est_latency:14.527536064436383
+Task id: 2; memory:1850; localMem:662.6230826433945; farMem:0; mce:107.62308264339447; est_latency:16.41825360733299
+Task id: 3; memory:1835; localMem:267.8910941708724; farMem:0; mce:84.3910941708724; est_latency:18.540103029041553
+
+Sever id: 4; localMem:0; farMem:-1022.4600000000002; mce:870.3399999999999
+Task id: 19; memory:1856; localMem:1354.7093829247674; farMem:-501.29061707523255; mce:426.7093829247674; est_latency:12.700919273034652
+Task id: 15; memory:1072; localMem:550.8306170752325; farMem:-521.1693829247675; mce:443.63061707523246; est_latency:14.86165469146237
+
+[[0, 0, 10, 6, 14, 8, 16, 13, 1, 17, 5, 18, 4, 7, 9, 11, 12, 2, 3, 19, 15], [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4], [0, 9, 9, 4, 0, 0, 9, 9, 2, 1, 8, 5, 5, 2, 2, 5, 4, 3, 1, 5, 1], [0.0, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10], [0.0, 10.882960940528445, 10.92223536349012, 15.99002324306156, 19.993397049280624, 19.993601779442088, 10.967468720621115, 10.971153754368352, 17.994477655241216, 18.995730260435096, 11.9095041547951, 14.964886412643217, 14.987314123208273, 17.983249659877753, 17.98536324249242, 12.873848446472092, 14.527536064436383, 16.41825360733299, 18.540103029041553, 12.700919273034652, 14.86165469146237], [0.0, 1111, 1369, 1588, 1512, 1536, 1385, 1477, 1260, 1351, 1087, 1127, 1875, 1290, 1380, 1145, 1256, 1850, 1835, 1856, 1072], [0.0, 1012.7064524121131, 1242.4929646675369, 636.6932796630833, 0.9410032162604319, 0.9263000410063627, 1250.7370563065876, 1333.2731367533, 252.58217489926824, 135.58263204084415, 879.0209402542807, 567.1346271717491, 939.6846532386993, 259.9846050496905, 277.8551742855803, 815.9443528789446, 687.3414703067886, 662.6230826433945, 267.8910941708724, 1354.7093829247674, 550.8306170752325]]
+--------------------------------- Oracle allocate Start-----------------------------------------------
+task 0： fixed_mce =  111.10000000000002
+task 10： fixed_mce =  136.89999999999986
+task 16： fixed_mce =  138.5
+task 13： fixed_mce =  147.70000000000005
+task 5： fixed_mce =  217.39999999999998
+task 18： fixed_mce =  563.5
+task 11： fixed_mce =  572.5
+task 12： fixed_mce =  753.5999999999999
+task 19： fixed_mce =  928.0
+task 4： fixed_mce =  937.5
+task 6： fixed_mce =  952.8
+task 15： fixed_mce =  964.8
+task 1： fixed_mce =  1008.0
+task 7： fixed_mce =  1032.0
+task 9： fixed_mce =  1104.0
+task 17： fixed_mce =  1215.9
+task 2： fixed_mce =  1295.0
+task 14： fixed_mce =  1512.0
+task 8： fixed_mce =  1536.0
+task 3： fixed_mce =  1651.5
+add  task 0 to Server 0 server rest memory is 2000.1
+add  task 10 to Server 1 server rest memory is 1767.8999999999999
+add  task 16 to Server 2 server rest memory is 1753.5
+add  task 13 to Server 3 server rest memory is 1670.7
+add  task 5 to Server 4 server rest memory is 2130.4
+add  task 18 to Server 4 server rest memory is 1566.9
+add  task 11 to Server 0 server rest memory is 1427.6
+add  task 12 to Server 1 server rest memory is 1265.4999999999998
+add  task 19 to Server 2 server rest memory is 825.5
+add  task 4 to Server 3 server rest memory is 733.2
+add  task 6 to Server 4 server rest memory is 931.7
+add  task 15 to Server 0 server rest memory is 1320.3999999999999
+add  task 1 to Server 0 server rest memory is 1068.3999999999999
+add  task 7 to Server 1 server rest memory is 1007.4999999999998
+add  task 9 to Server 0 server rest memory is 792.3999999999999
+add  task 17 to Server 1 server rest memory is 872.3999999999997
+add  task 2 to Server 4 server rest memory is 376.70000000000005
+add  task 14 to Server 1 server rest memory is 872.3999999999997
+add  task 8 to Server 1 server rest memory is 872.3999999999997
+add  task 3 to Server 1 server rest memory is 688.8999999999997
+
+Sever id: 1; localMem:688.8999999999997; mce:688.8999999999997
+Task id: 10; memory:1369; localMem:1232.1000000000001; mce:0.0; hfm:0.0
+Task id: 12; memory:1256; localMem:502.40000000000003; mce:0.0; hfm:0.0
+Task id: 7; memory:1290; localMem:258.0; mce:0.0; hfm:0.0
+Task id: 17; memory:1351; localMem:135.1; mce:0.0; hfm:0.0
+Task id: 14; memory:1512; localMem:0.0; mce:0.0; hfm:0.0
+Task id: 8; memory:1536; localMem:0.0; mce:0.0; hfm:0.0
+Task id: 3; memory:1835; localMem:183.5; mce:0.0; hfm:0.0
+
+Sever id: 2; localMem:825.5; mce:825.5
+Task id: 16; memory:1385; localMem:1246.5; mce:0.0; hfm:0.0
+Task id: 19; memory:1856; localMem:928.0; mce:0.0; hfm:0.0
+
+Sever id: 0; localMem:792.3999999999999; mce:792.3999999999999
+Task id: 0; memory:1111; localMem:999.9; mce:0.0; hfm:0.0
+Task id: 11; memory:1145; localMem:572.5; mce:0.0; hfm:0.0
+Task id: 15; memory:1072; localMem:107.2; mce:0.0; hfm:0.0
+Task id: 1; memory:1260; localMem:252.0; mce:0.0; hfm:0.0
+Task id: 9; memory:1380; localMem:276.0; mce:0.0; hfm:0.0
+
+Sever id: 3; localMem:733.2; mce:733.2
+Task id: 13; memory:1477; localMem:1329.3; mce:0.0; hfm:0.0
+Task id: 4; memory:1875; localMem:937.5; mce:0.0; hfm:0.0
+
+Sever id: 4; localMem:376.70000000000005; mce:376.70000000000005
+Task id: 5; memory:1087; localMem:869.6; mce:0.0; hfm:0.0
+Task id: 18; memory:1127; localMem:563.5; mce:0.0; hfm:0.0
+Task id: 6; memory:1588; localMem:635.2; mce:0.0; hfm:0.0
+Task id: 2; memory:1850; localMem:555.0; mce:0.0; hfm:0.0
+--------------------------------- Oracle Match Start-----------------------------------------------
+
+Sever id: 1; localMem:-1.4210854715202004e-13; mce:688.8999999999996
+Task id: 10; memory:1369; localMem:1330.5142857142857; mce:98.4142857142856; hfm:0.0
+Task id: 12; memory:1256; localMem:600.8142857142857; mce:98.41428571428565; hfm:0.0
+Task id: 7; memory:1290; localMem:356.4142857142857; mce:98.41428571428571; hfm:0.0
+Task id: 17; memory:1351; localMem:233.51428571428568; mce:98.41428571428568; hfm:0.0
+Task id: 14; memory:1512; localMem:98.41428571428568; mce:98.41428571428568; hfm:0.0
+Task id: 8; memory:1536; localMem:98.41428571428568; mce:98.41428571428568; hfm:0.0
+Task id: 3; memory:1835; localMem:281.9142857142857; mce:98.41428571428571; hfm:0.0
+
+Sever id: 2; localMem:0.0; mce:825.5
+Task id: 16; memory:1385; localMem:1659.25; mce:412.75; hfm:0.0
+Task id: 19; memory:1856; localMem:1340.75; mce:412.75; hfm:0.0
+
+Sever id: 0; localMem:0.0; mce:792.3999999999999
+Task id: 0; memory:1111; localMem:1158.3799999999999; mce:158.4799999999999; hfm:0.0
+Task id: 11; memory:1145; localMem:730.98; mce:158.48000000000002; hfm:0.0
+Task id: 15; memory:1072; localMem:265.67999999999995; mce:158.47999999999996; hfm:0.0
+Task id: 1; memory:1260; localMem:410.47999999999996; mce:158.47999999999996; hfm:0.0
+Task id: 9; memory:1380; localMem:434.47999999999996; mce:158.47999999999996; hfm:0.0
+
+Sever id: 3; localMem:0.0; mce:733.2
+Task id: 13; memory:1477; localMem:1695.9; mce:366.60000000000014; hfm:0.0
+Task id: 4; memory:1875; localMem:1304.1; mce:366.5999999999999; hfm:0.0
+
+Sever id: 4; localMem:0.0; mce:376.69999999999993
+Task id: 5; memory:1087; localMem:963.7750000000001; mce:94.17500000000007; hfm:0.0
+Task id: 18; memory:1127; localMem:657.675; mce:94.17499999999995; hfm:0.0
+Task id: 6; memory:1588; localMem:729.375; mce:94.17499999999995; hfm:0.0
+Task id: 2; memory:1850; localMem:649.175; mce:94.17499999999995; hfm:0.0
+
+--------------------------------- Oracle Inner Start-----------------------------------------------
+
+Sever id: 1; localMem:-7.105427357601002e-14; mce:688.8999999999999
+Task id: 10; memory:1369; localMem:1639.8604914533914; mce:407.7604914533913
+Task id: 12; memory:1256; localMem:576.4743249468806; mce:74.07432494688061
+Task id: 7; memory:1290; localMem:312.0914837984198; mce:54.0914837984198
+Task id: 17; memory:1351; localMem:181.01036374699333; mce:45.91036374699334
+Task id: 14; memory:1512; localMem:36.91958417987382; mce:36.91958417987382
+Task id: 8; memory:1536; localMem:36.34271567706329; mce:36.34271567706329
+Task id: 3; memory:1835; localMem:217.30103619737767; mce:33.80103619737767
+
+Sever id: 2; localMem:-2.842170943040401e-14; mce:825.5
+Task id: 16; memory:1385; localMem:1964.7972339428036; mce:718.2972339428036
+Task id: 19; memory:1856; localMem:1035.2027660571964; mce:107.20276605719641
+
+Sever id: 0; localMem:-1.3500311979441904e-13; mce:792.3999999999999
+Task id: 0; memory:1111; localMem:1521.1928639124944; mce:521.2928639124945
+Task id: 11; memory:1145; localMem:673.6626850317523; mce:101.16268503175229
+Task id: 15; memory:1072; localMem:167.22864550236127; mce:60.02864550236127
+Task id: 1; memory:1260; localMem:309.45598926654577; mce:57.45598926654577
+Task id: 9; memory:1380; localMem:328.45981628684615; mce:52.45981628684615
+
+Sever id: 3; localMem:-5.684341886080802e-14; mce:733.2
+Task id: 13; memory:1477; localMem:1962.7085882786582; mce:633.4085882786583
+Task id: 4; memory:1875; localMem:1037.2914117213418; mce:99.79141172134177
+
+Sever id: 4; localMem:2.1316282072803006e-14; mce:376.70000000000016
+Task id: 5; memory:1087; localMem:1081.009600464621; mce:211.4096004646209
+Task id: 18; memory:1127; localMem:645.0624616521891; mce:81.56246165218909
+Task id: 6; memory:1588; localMem:683.4372451102106; mce:48.23724511021055
+Task id: 2; memory:1850; localMem:590.4906927729796; mce:35.49069277297963
+
+--------------------------------- Oracle Inter Start-----------------------------------------------
+
+Sever id: 1; localMem:0; farMem:-5.559999999999832; mce:683.3399999999999
+Task id: 10; memory:1369; localMem:1636.5695227605756; farMem:-3.290968692815775; mce:404.4695227605755; est_latency:8.045511155876035
+Task id: 12; memory:1256; localMem:575.8764831023391; farMem:-0.5978418445415065; mce:73.47648310233905; est_latency:15.414996153643784
+Task id: 7; memory:1290; localMem:311.6549202189174; farMem:-0.43656357950240243; mce:53.654920218917425; est_latency:17.584070385899853
+Task id: 17; memory:1351; localMem:180.63982865854322; farMem:-0.370535088450102; mce:45.53982865854323; est_latency:18.66291762650966
+Task id: 14; memory:1512; localMem:36.62161221291186; farMem:-0.29797196696195716; mce:36.62161221291186; est_latency:19.757793570020407
+Task id: 8; memory:1536; localMem:36.04939952208511; farMem:-0.29331615497817654; mce:36.04939952208511; est_latency:19.765303388528075
+Task id: 3; memory:1835; localMem:217.02823352462775; farMem:-0.2728026727499117; mce:33.52823352462775; est_latency:18.817284830928443
+
+Sever id: 2; localMem:0; farMem:-142.15999999999997; mce:683.3400000000001
+Task id: 16; memory:1385; localMem:1841.09870604782; farMem:-123.69852789498357; mce:594.5987060478201; est_latency:6.7068685483914035
+Task id: 19; memory:1856; localMem:1016.7412939521801; farMem:-18.4614721050164; mce:88.74129395218006; est_latency:14.521868028274879
+
+Sever id: 0; localMem:0; farMem:-109.05999999999983; mce:683.34
+Task id: 0; memory:1111; localMem:1449.4460192149975; farMem:-71.74684469749693; mce:449.5460192149975; est_latency:6.953681195184702
+Task id: 11; memory:1145; localMem:659.7394108904564; farMem:-13.923274141295922; mce:87.23941089045638; est_latency:14.238083747681591
+Task id: 15; memory:1072; localMem:158.96675241996917; farMem:-8.261893082392113; mce:51.766752419969166; est_latency:18.517101190112214
+Task id: 1; memory:1260; localMem:301.54817731625616; farMem:-7.907811950289591; mce:49.54817731625616; est_latency:17.60676049749002
+Task id: 9; memory:1380; localMem:321.23964015832087; farMem:-7.220176128525281; mce:45.23964015832087; est_latency:17.672176520591865
+
+Sever id: 3; localMem:0; farMem:-49.860000000000014; mce:683.3400000000001
+Task id: 13; memory:1477; localMem:1919.634730925175; farMem:-43.073857353483234; mce:590.3347309251751; est_latency:7.003150095293485
+Task id: 4; memory:1875; localMem:1030.505269074825; farMem:-6.786142646516779; mce:93.00526907482504; est_latency:14.503971898267588
+
+Sever id: 4; localMem:2.1316282072803006e-14; farMem:306.6399999999999; mce:683.34
+Task id: 5; memory:1087; localMem:1081.009600464621; farMem:172.0908943097194; mce:383.50049477434027; est_latency:10.054999252403933
+Task id: 18; memory:1127; localMem:645.0624616521891; farMem:66.39318619863884; mce:147.95564785082792; est_latency:14.275108713180233
+Task id: 6; memory:1588; localMem:683.4372451102106; farMem:39.2659114430447; mce:87.50315655325525; est_latency:15.695744477751266
+Task id: 2; memory:1850; localMem:590.4906927729796; farMem:28.890008048596904; mce:64.38070082157654; est_latency:16.807846093032005
+
+[[0, 10, 12, 7, 17, 14, 8, 3, 16, 19, 0, 11, 15, 1, 9, 13, 4, 5, 18, 6, 2], [0, 1, 1, 1, 1, 1, 1, 1, 2, 2, 0, 0, 0, 0, 0, 3, 3, 4, 4, 4, 4], [0, 9, 4, 2, 1, 0, 0, 1, 9, 5, 9, 5, 1, 2, 2, 9, 5, 8, 5, 4, 3], [0.0, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10], [0.0, 8.045511155876035, 15.414996153643784, 17.584070385899853, 18.66291762650966, 19.757793570020407, 19.765303388528075, 18.817284830928443, 6.7068685483914035, 14.521868028274879, 6.953681195184702, 14.238083747681591, 18.517101190112214, 17.60676049749002, 17.672176520591865, 7.003150095293485, 14.503971898267588, 10.054999252403933, 14.275108713180233, 15.695744477751266, 16.807846093032005], [0.0, 1369, 1256, 1290, 1351, 1512, 1536, 1835, 1385, 1856, 1111, 1145, 1072, 1260, 1380, 1477, 1875, 1087, 1127, 1588, 1850], [0.0, 1636.5695227605756, 575.8764831023391, 311.6549202189174, 180.63982865854322, 36.62161221291186, 36.04939952208511, 217.02823352462775, 1841.09870604782, 1016.7412939521801, 1449.4460192149975, 659.7394108904564, 158.96675241996917, 301.54817731625616, 321.23964015832087, 1919.634730925175, 1030.505269074825, 1081.009600464621, 645.0624616521891, 683.4372451102106, 590.4906927729796]]
+end
+
+Process finished with exit code 0
