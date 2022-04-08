@@ -10,7 +10,7 @@ In this work, we propose HyFarM, a novel task management strategy for hybrid FM 
 Python3
 
 # How To Run
-<code>.python ./manager.py </code>
+<code>python3 ./manager.py </code>
 # Parameter Configurations
 Set sever number as  50, we use  <code> ServerNum = 50 </code>
 Set Task number as 2000, we use  <code> Tasknum = 2000 </code>
