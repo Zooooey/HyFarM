@@ -19,8 +19,12 @@ Pandas
 <code>python3 manager.py </code>
 
 # How To Run in Container
-We provide docker image in Baidu cloud[https://pan.baidu.com/s/1oLvpO3Mzu4Q2w3WBDkP8Ow?pwd=t6ra]. with code t6ra.
+We provide docker image in Baidu cloud[https://pan.baidu.com/s/1oLvpO3Mzu4Q2w3WBDkP8Ow?pwd=t6ra] with extracting code **t6ra**.
+Start docker:
+
 <code> docker run -it hyfarm:v1 bash </code>
+Run application:
+
 <code> python3 /root/FarMemSysSimv6/Manager.py</code>
 
 # Parameter Configurations
