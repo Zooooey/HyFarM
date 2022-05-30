@@ -8,9 +8,21 @@ In this work, we propose HyFarM, a novel task management strategy for hybrid FM 
 
 # Environment
 Python3
+Numpy
+Pandas
+<code> apt-get install python3 </code>
+<code> apt-get install python3-pip </code>
+<code> pip install numpy </code>
+<code> pip install pandas </code>
 
 # How To Run
 <code>python3 manager.py </code>
+
+# How To Run in Container
+We provide docker image in Baidu cloud[https://pan.baidu.com/s/1oLvpO3Mzu4Q2w3WBDkP8Ow?pwd=t6ra]. with code t6ra.
+<code> docker run -it hyfarm:v1 bash </code>
+<code> python3 /root/FarMemSysSimv6/Manager.py</code>
+
 # Parameter Configurations
 Set sever number as  50, we use  <code> ServerNum = 50 </code>
 Set Task number as 2000, we use  <code> Tasknum = 2000 </code>
