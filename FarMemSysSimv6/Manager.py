@@ -7,8 +7,8 @@ from Cluster import Cluster
 from Server import Server,MAX_SSD,MAX_MEMORY
 from Task import Task
 
-tasknum = 20 #200
-ServerNum = 4 #10
+tasknum = 2000
+ServerNum = 50
 
 profiles = { }
 index    = [0, 1,   2,   3,   4,   5,   6,   7,   8,   9,  10]
