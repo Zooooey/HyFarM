@@ -9,13 +9,13 @@ class Task:
     profile = {0.0 : (0.0, 0.0)}  #farRatio => (latancy, page fault)  latency =>far ratio, page fault
     pagefaultlist = [0] * 11 #far ratio = 0,1,2,3,4,5,6,7,8,9,10
     latencylist = [0.0] * 11 #far ratio = 0,1,2,3,4,5,6,7,8,9,10
-    leastlocalratio = 10
-    leastlocalmemory = 0
+    leastlocalratio = 10 # 定义任务所需的最小内存比例，由这个比例确定，10代表10/10，即leastLocalMemory = 10/10的localMemory
+    leastlocalmemory = 0 # task所需的最小localMemory
     type = 0
     fixed_mce = 0
     mce = 0.0
     localServer = 0
-    localMem = 0.0
+    localMem = 0.0 
     farServer = 0
     hfm = 0.0
     ssd = 0.0

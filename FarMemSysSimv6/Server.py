@@ -2,7 +2,10 @@ import Task
 MAX_MEMORY = 20000
 MAX_SSD = 2000000
 class Server:
+    #Server id
     id = 0
+
+    # Available memory for this server
     localMem = MAX_MEMORY  #avalible Memory
 
     #farMem = 0
@@ -10,6 +13,7 @@ class Server:
     ssd = MAX_MEMORY  #avalible SSD
 
     server_runningTasks = []  #taskId => Task()
+    #TODO:what is mce?
     mce = 0.0
     least_mce_task = 0
     task_mce_list = [0.0]
@@ -26,6 +30,8 @@ class Server:
         self.alias_task_mce_list = []
         self.farMem = 0
         self.farMemSever = 0
+
+    # append task instance into array 'server_runningTasks'
 
     def addTask(self, task, taskMem):
         self.server_runningTasks.append(task)

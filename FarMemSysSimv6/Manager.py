@@ -20,9 +20,9 @@ full_sens= [1, 3, 6.2, 6.8, 7.2, 7.6, 7.9,   8, 8.1, 8.2, 8.3 ]
 part_non = [1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0]
 
 def creatCluster():
-    serverNum = ServerNum
-    serverMem = MAX_MEMORY  #M
-    serverSSD = MAX_SSD  #M
+    serverNum = ServerNum #default: 50
+    serverMem = MAX_MEMORY  #default: 20000, memory size of every server(unit?)
+    serverSSD = MAX_SSD  #default: 2000000, ssd capacity of every server(unit?)
     serverList = []
     for i in range(serverNum):
         server = Server(i, serverMem, serverSSD)
@@ -46,12 +46,13 @@ def taskGenerator(tasknum):
 
 def realTaskGenerator():
     taskList = []
-    global_SLA = 1.5
+    global_SLA = 1.5 #TODO: 什么是global_SLA
+    # 模拟一个task需要基础的task_id， 占用内存，它的latency_list和pagefault_list，还有一个global_SLA
     quicksort2G = Task(0,2052,
                        [74.3,104.81,111.44,129.44,143.35,156.21,172.57,188.5,999999999,999999999,999999999],
                        [2,3033474,314198,449932,488308,671468,665971,971614,999999999,999999999,999999999],
                        global_SLA)
-    quicksort2G.type = 0
+    quicksort2G.type = 0 #TODO: 这个type是什么
     print("quicksort2G: task " + repr(quicksort2G.id) + '： least local ratio = ' + repr(quicksort2G.leastlocalratio) + ' task memory = ' +repr(quicksort2G.memory) +' task SLA latency = ' +repr(quicksort2G.longestLatancy))
     taskList.append(quicksort2G)
 
@@ -179,13 +180,17 @@ def realTaskGenerator():
     return taskList
 
 
+
 def realTaskGeneratorN(tasknum):
+    """
+    There are several typical task, we use random algorithm to chose task then put into our result list
+    """
     realTaskList = realTaskGenerator()
     taskList = []
     i = 0
     while i in range(tasknum):
     # for i in range(tasknum):
-        task = copy.deepcopy(random.choice(realTaskList))
+        task = copy.deepcopy(random.choice(realTaskList))# random.choise随机选择一个task
         task.updateID(i)
         print(
             "task " + repr(task.id) + '： least local ratio = ' + repr(task.leastlocalratio) + ' task memory = ' + repr(
@@ -197,6 +202,13 @@ def realTaskGeneratorN(tasknum):
 
 
 def full_match(task, cluster):
+    """
+    按顺序找到合适的server后assign这个task给这个server。
+
+    :param task: The task to assign
+    :param cluster: The cluster to hold the task
+    :return: [(true if the task has been assigned),(The id of server that hold the task, -100 mean no server memory match), ()]
+    """
     #print('full_match start')
     allocMem = 0
     # tmce = task.mce
@@ -353,17 +365,24 @@ def sort_by_mce(taskList):
      return taskList
 
 def worst_allocateTasks(taskList, cluster):
+    # 先给taskList里的task根据mce排序。
     sorted_taskList = sort_by_mce(taskList)
     for task in sorted_taskList:
         print("task " + repr(task.id) + '： fixed_mce =  ' + repr(task.fixed_mce))
+        # assign all task to the cluster.
+
     for task in sorted_taskList:
+        # TODO: full match 貌似是直接随便分配的意思。
         ifmatchsuccess, localServerId, localMem = full_match(task, cluster)
     for task in sorted_taskList:
         if task.localMem == 0: #& ifmatchsuccess == False:
             # cluster.servers[localServerId].addTask( task, localMem)
+            # TODO: 这个worst press到底在干什么
             ifsuccess, sid, alm = worst_press_server(task, cluster)
             if ifsuccess == False:
                 print("wait")
+
+    # 所有task分配完毕，打印汇总信息。
     for sever in cluster.servers:
         print ()
         print ('Sever id: '+ str(sever.id)+'; localMem:'+str(sever.localMem)+'; mce:'+str(sever.mce))
@@ -372,11 +391,15 @@ def worst_allocateTasks(taskList, cluster):
 
 
 def oracle_allocateTasks(taskList, cluster):
+    # 先给taskList里的task根据mce排序。
     sorted_taskList = sort_by_mce(taskList)
     for task in sorted_taskList:
         print("task " + repr(task.id) + '： fixed_mce =  ' + repr(task.fixed_mce))
+
     for task in sorted_taskList:
+        # 每一次，都要根据cluster里server的mce值进行重新排序排序。
         cluster.servers.sort(key=lambda x: x.mce,reverse = True)
+        # 排序后，按顺序找到最匹配的server，把这个task assign进去。
         for sever in cluster.servers:
             if sever.localMem > task.leastlocalmemory:
                 allocMem = task.leastlocalmemory
@@ -389,7 +412,9 @@ def oracle_allocateTasks(taskList, cluster):
                 print("add  task " + repr(task.id) + ' to Server ' + repr(sever.id) + ' server rest memory is ' + repr(sever.localMem))
                 break
             else:
+                # 没找到合适的server，下一个。
                 continue
+    # 分配完所有task后，打印最终结果信息。
     for sever in cluster.servers:
         print ()
         print ('Sever id: '+ str(sever.id)+'; localMem:'+str(sever.localMem)+'; mce:'+str(sever.mce))
@@ -496,8 +521,9 @@ def worst_inner(cluster):
         if s.mce == s.localMem:
             needMem = 0
             for task in s.server_runningTasks:
-                needMem = needMem + task.memory - task.localMem
+                needMem = needMem + task.memory - task.localMem #把localMem减去，这是只剩remoteMem
             if needMem > s.localMem:  # localmem可以都分出去，不会出现task已经fullmem了
+                #ccy:needMem如果是remoteMem的话，大于s.localMeme
                 transfer_Mem = s.localMem / len(s.server_runningTasks)
             else:
                 transfer_Mem = needMem / len(s.server_runningTasks)
@@ -713,7 +739,7 @@ if __name__ == '__main__':
     cluster = creatCluster()
     # waitingTasks = taskGenerator(tasknum)
     #waitingTasks = realTaskGenerator()
-    waitingTasks = realTaskGeneratorN(tasknum)
+    waitingTasks = realTaskGeneratorN(tasknum) #default tasknum is 2000
 
     print ('--------------------------------- worst allocate Start-----------------------------------------------')
     worst_allocate_cluster = copy.deepcopy(cluster)
@@ -734,6 +760,7 @@ if __name__ == '__main__':
 
     print ('--------------------------------- Oracle allocate Start-----------------------------------------------')
     oracle_allocate_cluster = copy.deepcopy(cluster)
+    # 这把task按最好的方式分配给cluster里的各个server
     oracle_allocateTasks(waitingTasks, oracle_allocate_cluster)
 
     print ('--------------------------------- Oracle Match Start-----------------------------------------------')
