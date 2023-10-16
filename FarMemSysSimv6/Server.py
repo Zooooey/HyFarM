@@ -6,11 +6,11 @@ class Server:
     id = 0
 
     # Available memory for this server
-    localMem = MAX_MEMORY  #avalible Memory
+    availMem = MAX_MEMORY  #currently avalible memory
 
     #farMem = 0
     farMemSever = 0
-    ssd = MAX_MEMORY  #avalible SSD
+    ssd = MAX_MEMORY  #currently avalible SSD
 
     server_runningTasks = []  #taskId => Task()
     #TODO:what is mce?
@@ -21,7 +21,7 @@ class Server:
 
     def __init__(self, id, memory, ssd):
         self.id = id
-        self.localMem = memory
+        self.availMem = memory
         self.ssd = ssd
         self.mce = memory
         self.server_runningTasks = []
@@ -37,8 +37,8 @@ class Server:
         self.server_runningTasks.append(task)
         task.localServer = self.id
         #task.updateMem(taskMem)
-        if self.localMem >0 :
-            self.localMem = self.localMem -taskMem
+        if self.availMem >0 :
+            self.availMem = self.availMem - taskMem
             self.ssd = self.ssd - task.ssd
         else:
             print("server " + repr(self.id) +" has no space" )
@@ -47,18 +47,18 @@ class Server:
 
     def resetTask(self, taskId, task, memory, ssd):
         self.server_runningTasks[taskId] = task
-        self.localMem += memory
+        self.availMem += memory
         self.ssd += ssd
         self.updateMCE()
 
     def finishTask(self, taskId):
-        self.localMem = self.localMem + self.runningTasks[taskId].localMem
+        self.availMem = self.availMem + self.runningTasks[taskId].availMem
         self.ssd = self.ssd + self.runningTasks[taskId].ssd
         del self.server_runningTasks[taskId]
         self.updateMCE()
 
     def finishFarTask(self, farMem):
-        self.localMem = self.localMem + farMem
+        self.availMem = self.availMem + farMem
 
     # def getMaxMCEtask(self):
     #     maxMCE = -float('inf')
@@ -71,7 +71,7 @@ class Server:
 
     #TODO  
     def updateMCE(self):
-        self.mce = self.localMem
+        self.mce = self.availMem
         for task in self.server_runningTasks:
             tmce = task.mce
             self.task_mce_list.append(tmce)

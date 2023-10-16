@@ -15,13 +15,22 @@ class Task:
     fixed_mce = 0
     mce = 0.0
     localServer = 0
-    localMem = 0.0 
+    localMem = 0.0 # 当前所在的server里，这个task使用这个server的localMem
     farServer = 0
     hfm = 0.0
     ssd = 0.0
     runtime = 0.0
 
     def __init__(self, id, memory, latencylist, pagefaultlist, SLA):
+        """
+
+        :param id:
+        :param memory: 该任务需要消耗的内存(本地和远程都需要)
+        :param latencylist:有10个，第一个是shortestLatency
+        :param pagefaultlist:
+        :param SLA: SLA和最小的latency相乘得到accept_latency，利用accept_latency算出leastlocalratio。例如: latencyList=[1,2,...10]
+        SLA=3，那么accept_latency=1*3 = 3, 那么latency列表里只有3个latency小于3。由此求得leastlocalratio=10-3+1 = 8;
+        """
         self.id = id
         self.memory = memory
         self.localMem = 0
@@ -30,9 +39,12 @@ class Task:
         self.shortestLatancy = latencylist[0]
         self.leastlocalratio = self.get_least_local_ratio(SLA)
         #self.leastlocalratio = leastlocalratio
+        # 根据SLA求得leastlocalratio后，可以定位再latenclist列表里最长的latency，超过这个latency视为不能接受。
         self.longestLatancy = latencylist[10 - self.leastlocalratio]
+        # 求得leastlocalratio后利用它求本task至少要留多少local mem
         self.leastlocalmemory = self.leastlocalratio/10 * memory
         #self.profile = profile
+        #TODO: 这是远端内存？
         self.fixed_mce = self.memory - self.leastlocalratio/10 * self.memory
         self.hfm = 0.0
         self.ssd = self.memory-self.localMem-self.hfm
