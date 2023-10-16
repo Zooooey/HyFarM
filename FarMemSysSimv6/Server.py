@@ -71,9 +71,14 @@ class Server:
 
     #TODO  
     def updateMCE(self):
+        """
+        server的mce等于其当前avial mem和所有task的mce的累加。可以理解为内存潜力,经过处理后可以空出来的内存量。
+        :return:
+        """
         self.mce = self.availMem
         for task in self.server_runningTasks:
             tmce = task.mce
+            # FIXME: 这个不清空不会越加越多吗？
             self.task_mce_list.append(tmce)
             self.mce =self.mce + tmce
         # if (len(self.server_runningTasks)== 0):

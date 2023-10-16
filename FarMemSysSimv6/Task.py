@@ -44,7 +44,7 @@ class Task:
         # 求得leastlocalratio后利用它求本task至少要留多少local mem
         self.leastlocalmemory = self.leastlocalratio/10 * memory
         #self.profile = profile
-        #TODO: 这是远端内存？
+        # fixed_mce在这里的含义是当前task多少内存可以存放到远端
         self.fixed_mce = self.memory - self.leastlocalratio/10 * self.memory
         self.hfm = 0.0
         self.ssd = self.memory-self.localMem-self.hfm
@@ -77,10 +77,11 @@ class Task:
 
     def updateMCE(self):
         #self.mce = (10 -self.leastlocalratio)/10 * self.memory
-        if self.farMem>0:
+        if self.farMem>0: # FIXME: 原作者并没有实现farMem的相关功能，所以这个if不会成功
             self.mce = self.localMem - self.leastlocalratio/10 * self.memory + self.farMem
             self.hfm = min(self.farMem, self.memory-self.localMem)
         else:
+            # self.localMem是当前task在当前server上使用的本地内存大小，减去的是当前task至少需要的本地内存数。他们的差值含义就是还有多少内存可以evict出去。
             self.mce = self.localMem - self.leastlocalratio / 10 * self.memory
             self.hfm = 0.0
 
@@ -91,6 +92,13 @@ class Task:
         self.ssd = self.memory - self.localMem - self.hfm
 
     def get_least_local_ratio(self, SLA):
+        """
+        least local ratio需要靠SLA来计算。假设一个latency list = [1,2,3,...10]，SLA=4。
+        那么shortest latency = 1；accept latency = 4 * shortest latency = 4；
+        那么这个list里能被接受的latency只有4个，所以least local ratio = 10 - 4 +1 = 7；
+        :param SLA:
+        :return:
+        """
         self.SLA = SLA
         accept_latency = SLA * self.shortestLatancy
         #print('accept_latency is ' + str(accept_latency))

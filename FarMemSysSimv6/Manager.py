@@ -249,6 +249,7 @@ def worst_press_server(task, cluster):
             print( "add  task " + repr(task.id) + ' to Server ' + repr(s.id) + ' server rest memory is ' + repr(s.availMem))
             return True, matched_server.id, allocMem
         elif s.mce >= task.leastlocalmemory:
+            # 也许把mce理解为Memory Can be evict就好理解了，因为mce还有余量，所以server可以放入这些task
             # 把每一个现有task都压缩为SLA，更新server memory
             print('press sever '+str(s.id)+' current tasks to leastlocalmemory')
             for t in s.server_runningTasks:
@@ -447,15 +448,23 @@ def oracle_allocateTasks(taskList, cluster):
 def worst_match(cluster):
     print ()
     for s in cluster.servers:
+        # 我们已经把mce理解为内存潜力，如果一个server的内存潜力和它当前的availMem相等，说明它上面的task已经没有任何潜力了。
         if s.mce == s.availMem:
+            # 这里needMem理解为一个task恢复成full mem所需要的内存数量。
             needMem = 0
             for task in s.server_runningTasks:
+                # 把这些信息统计起来。
                 needMem = needMem + task.memory - task.localMem
-            if needMem > s.availMem:  # localmem可以都分出去，不会出现task已经fullmem了
+
+            if needMem > s.availMem:  # availMem可以都分出去，不会出现task已经fullmem了
+                # 均分？比如如果needMem > s.availMem，说明能分的只有s.availMem，所以把它均分了。
                 transfer_Mem = s.availMem / len(s.server_runningTasks)
             else:
                 transfer_Mem = needMem / len(s.server_runningTasks)
+
+            # 其实就是找一个server，因为当前task都已经是最佳状态(最小local mem)，所以我们要把它的最佳状态打破，让它退化。
             for task in s.server_runningTasks:
+                # 把均分到的内存分给task的localMem
                 task.localMem = task.localMem + transfer_Mem
                 s.availMem = s.availMem - transfer_Mem
                 task.updateMCE()
@@ -522,15 +531,19 @@ def ratio_according2fixedmce(tasks):
 def worst_inner(cluster):
     print ()
     for s in cluster.servers:
+        # 找一个所有task已经压榨完了的server(上面的task都以最小local mem在运行)
         if s.mce == s.availMem:
+            # 统计这些task“退化”所需的总内存
             needMem = 0
             for task in s.server_runningTasks:
                 needMem = needMem + task.memory - task.localMem #把localMem减去，这是只剩remoteMem
+
             if needMem > s.availMem:  # localmem可以都分出去，不会出现task已经fullmem了
                 #ccy:needMem如果是remoteMem的话，大于s.localMeme
                 transfer_Mem = s.availMem / len(s.server_runningTasks)
             else:
                 transfer_Mem = needMem / len(s.server_runningTasks)
+
             # transfer_Mem = s.localMem
             ratio = ratio_according2fixedmce(s.server_runningTasks)
             i = 0
