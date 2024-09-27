@@ -26,7 +26,7 @@ class Cluster:
     def allocFarTask(self, task, farMem, localserver, farserver):
         task.updateFarServer(farMem,farserver)
         self.runningTask[task.id] = task.id
-        self.servers[localserver.id].addTask(task.id,task, task.localMem)
+        self.servers[localserver.id].addTask(task.id,task, task.ocalMem)
         self.servers[farserver.id].addTask(task.id,task, task.localMem)
 
     def finishTask(self):

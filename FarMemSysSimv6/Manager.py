@@ -20,9 +20,9 @@ full_sens= [1, 3, 6.2, 6.8, 7.2, 7.6, 7.9,   8, 8.1, 8.2, 8.3 ]
 part_non = [1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0]
 
 def creatCluster():
-    serverNum = ServerNum
-    serverMem = MAX_MEMORY  #M
-    serverSSD = MAX_SSD  #M
+    serverNum = ServerNum #default: 50
+    serverMem = MAX_MEMORY  #default: 20000, memory size of every server(unit?)
+    serverSSD = MAX_SSD  #default: 2000000, ssd capacity of every server(unit?)
     serverList = []
     for i in range(serverNum):
         server = Server(i, serverMem, serverSSD)
@@ -46,12 +46,13 @@ def taskGenerator(tasknum):
 
 def realTaskGenerator():
     taskList = []
-    global_SLA = 1.5
+    global_SLA = 1.5 #TODO: 什么是global_SLA
+    # 模拟一个task需要基础的task_id， 占用内存，它的latency_list和pagefault_list，还有一个global_SLA
     quicksort2G = Task(0,2052,
                        [74.3,104.81,111.44,129.44,143.35,156.21,172.57,188.5,999999999,999999999,999999999],
                        [2,3033474,314198,449932,488308,671468,665971,971614,999999999,999999999,999999999],
                        global_SLA)
-    quicksort2G.type = 0
+    quicksort2G.type = 0 #TODO: 这个type是什么
     print("quicksort2G: task " + repr(quicksort2G.id) + '： least local ratio = ' + repr(quicksort2G.leastlocalratio) + ' task memory = ' +repr(quicksort2G.memory) +' task SLA latency = ' +repr(quicksort2G.longestLatancy))
     taskList.append(quicksort2G)
 
@@ -179,13 +180,17 @@ def realTaskGenerator():
     return taskList
 
 
+
 def realTaskGeneratorN(tasknum):
+    """
+    There are several typical task, we use random algorithm to chose task then put into our result list
+    """
     realTaskList = realTaskGenerator()
     taskList = []
     i = 0
     while i in range(tasknum):
     # for i in range(tasknum):
-        task = copy.deepcopy(random.choice(realTaskList))
+        task = copy.deepcopy(random.choice(realTaskList))# random.choise随机选择一个task
         task.updateID(i)
         print(
             "task " + repr(task.id) + '： least local ratio = ' + repr(task.leastlocalratio) + ' task memory = ' + repr(
@@ -196,34 +201,44 @@ def realTaskGeneratorN(tasknum):
 
 
 
-def full_match(task, cluster):
+def full_mem_match(task, cluster):
+    """
+    按顺序找到合适的server后assign这个task给这个server。不考虑local mem和far mem，直接按task使用的内存分配
+
+    :param task: The task to assign
+    :param cluster: The cluster to hold the task
+    :return: [(true if the task has been assigned),(The id of server that hold the task, -100 mean no server memory match), ()]
+    """
     #print('full_match start')
     allocMem = 0
     # tmce = task.mce
     # alias_smceList = cluster.alias_mcelist
     for s in cluster.servers:
-        if task.memory <= s.localMem:
+        if task.memory <= s.availMem:
             allocMem = task.memory
             #matched_server =s
-            print('full match : ' + 'Server ' + repr(s.id) + ' has '+ repr(s.localMem) + ' memory to hold task '+repr(task.id))
+            print('full match : ' + 'Server ' + repr(s.id) + ' has ' + repr(s.availMem) + ' memory to hold task ' + repr(task.id))
             #update server
             task.localMem = allocMem
             task.localServer = s
             task.updateMCE()
             s.addTask(task, allocMem)
-            print('sever ' + repr(s.id) +' add task '+repr(task.id)+', server.memory is '  + repr(s.localMem)+ ' sever mce = ' + repr(s.mce))
+            print('sever ' + repr(s.id) +' add task ' + repr(task.id) +', server.memory is ' + repr(s.availMem) + ' sever mce = ' + repr(s.mce))
             print('sever id = ' + repr(s.id) + ' has '+str(len(s.server_runningTasks))+' tasks, sever mce = ' + repr(s.mce))
             print ()
             return True, s.id, allocMem
     return False ,-100, allocMem
 
 def worst_press_server(task, cluster):
+    """
+    按task能接受的最小local mem分配给server；或尝试压缩server，让其task都使用最小local mem然后再分配
+    """
     print ()
     allocMem = 0
     for s in cluster.servers:
         # 新分配的任务也是SLA
         # print('sever id = ' +repr(s.id)+ ' sever mce = ' +repr(s.mce))
-        if s.localMem >= task.leastlocalmemory:
+        if s.availMem >= task.leastlocalmemory:
             allocMem = task.leastlocalmemory
             matched_server = s
             task.localMem = allocMem
@@ -231,16 +246,17 @@ def worst_press_server(task, cluster):
             task.localServer = matched_server
             matched_server.addTask(task, allocMem)
             # matched_server.updateMCE()
-            print( "add  task " + repr(task.id) + ' to Server ' + repr(s.id) + ' server rest memory is ' + repr(s.localMem))
+            print( "add  task " + repr(task.id) + ' to Server ' + repr(s.id) + ' server rest memory is ' + repr(s.availMem))
             return True, matched_server.id, allocMem
         elif s.mce >= task.leastlocalmemory:
+            # 也许把mce理解为Memory Can be evict就好理解了，因为mce还有余量，所以server可以放入这些task
             # 把每一个现有task都压缩为SLA，更新server memory
             print('press sever '+str(s.id)+' current tasks to leastlocalmemory')
             for t in s.server_runningTasks:
                 #t = s.runningTasks[tid]
-                t.localMem = t.leastlocalmemory
+                t.localMem = t.leastlocalmemory # 调整当前task占用server的内存为最小local memory
                 t.updateMCE()
-                s.localMem = s.localMem +(t.memory -t.localMem)
+                s.availMem = s.availMem + (t.memory - t.localMem) #由于被压缩，所有task只保留localMem部分。server的availMem增加
             allocMem = task.leastlocalmemory
             matched_server = s
             task.localMem = allocMem
@@ -249,7 +265,7 @@ def worst_press_server(task, cluster):
             matched_server.addTask( task, allocMem)
             # matched_server.updateMCE()
             # print('Server ' + repr(s.id) + " can hold the task " + repr(task.id) + " if squeezing current tasks to SLA")
-            print("add  task " + repr(task.id) + ' to Server ' + repr(s.id) + ' server rest memory is ' + repr(s.localMem))
+            print("add  task " + repr(task.id) + ' to Server ' + repr(s.id) + ' server rest memory is ' + repr(s.availMem))
             return True, matched_server.id, allocMem
         else:
             continue
@@ -261,13 +277,13 @@ def press_server(task, cluster):
     print('press_server start')
     allocMem = 0
     for s in cluster.servers:
-        if s.localMem <= 1:  ##1M reserved
+        if s.availMem <= 1:  ##1M reserved
             print('Server ' + repr(s.id) + " has no memory to hold task " + repr(task.id) + ', try next server')
             continue
         if allocMem == 0:
             # print('Server ' + repr(s.id) + " cannot hold the full task" + repr(task.id))
-            if s.localMem >= task.leastlocalmemory:
-                allocMem = s.localMem
+            if s.availMem >= task.leastlocalmemory:
+                allocMem = s.availMem
                 matched_server = s
                 task.localMem = allocMem
                 task.localServer = matched_server
@@ -293,7 +309,7 @@ def press_server(task, cluster):
 def find_far(task, serverId, cluster):
     print("find far server for task" +repr(task.id))
     for s in cluster.servers:
-        if s.localMem <= 2:
+        if s.availMem <= 2:
             continue
         if s.id == serverId:
             continue
@@ -353,32 +369,44 @@ def sort_by_mce(taskList):
      return taskList
 
 def worst_allocateTasks(taskList, cluster):
+    # 先给taskList里的task根据mce排序。
     sorted_taskList = sort_by_mce(taskList)
     for task in sorted_taskList:
         print("task " + repr(task.id) + '： fixed_mce =  ' + repr(task.fixed_mce))
+        # assign all task to the cluster.
+
     for task in sorted_taskList:
-        ifmatchsuccess, localServerId, localMem = full_match(task, cluster)
+        # 全内存分配task，不考虑local mem和far mem
+        ifmatchsuccess, localServerId, localMem = full_mem_match(task, cluster)
     for task in sorted_taskList:
+        # 这里原作者根据localMem认定这个task没有分配成功
         if task.localMem == 0: #& ifmatchsuccess == False:
             # cluster.servers[localServerId].addTask( task, localMem)
+            # 尝试使用worst_press_server函数分配task
             ifsuccess, sid, alm = worst_press_server(task, cluster)
             if ifsuccess == False:
                 print("wait")
+
+    # 所有task分配完毕，打印汇总信息。
     for sever in cluster.servers:
         print ()
-        print ('Sever id: '+ str(sever.id)+'; localMem:'+str(sever.localMem)+'; mce:'+str(sever.mce))
+        print ('Sever id: ' + str(sever.id) +'; availMem:' + str(sever.availMem) + '; mce:' + str(sever.mce))
         for task in sever.server_runningTasks:
             print ('Task id: '+ str(task.id)+'; memory:'+str(task.memory)+'; localMem:'+str(task.localMem)+'; mce:'+str(task.mce)+'; hfm:'+str(task.hfm))
 
 
 def oracle_allocateTasks(taskList, cluster):
+    # 先给taskList里的task根据mce排序。
     sorted_taskList = sort_by_mce(taskList)
     for task in sorted_taskList:
         print("task " + repr(task.id) + '： fixed_mce =  ' + repr(task.fixed_mce))
+
     for task in sorted_taskList:
+        # 每一次，都要根据cluster里server的mce值进行重新排序排序。
         cluster.servers.sort(key=lambda x: x.mce,reverse = True)
+        # 排序后，按顺序找到最匹配的server，把这个task assign进去。
         for sever in cluster.servers:
-            if sever.localMem > task.leastlocalmemory:
+            if sever.availMem > task.leastlocalmemory:
                 allocMem = task.leastlocalmemory
                 matched_server = sever
                 task.localMem = allocMem
@@ -386,13 +414,15 @@ def oracle_allocateTasks(taskList, cluster):
                 task.updateMCE()
                 matched_server.addTask(task, allocMem)
                 # matched_server.updateMCE()
-                print("add  task " + repr(task.id) + ' to Server ' + repr(sever.id) + ' server rest memory is ' + repr(sever.localMem))
+                print("add  task " + repr(task.id) + ' to Server ' + repr(sever.id) + ' server rest memory is ' + repr(sever.availMem))
                 break
             else:
+                # 没找到合适的server，下一个。
                 continue
+    # 分配完所有task后，打印最终结果信息。
     for sever in cluster.servers:
         print ()
-        print ('Sever id: '+ str(sever.id)+'; localMem:'+str(sever.localMem)+'; mce:'+str(sever.mce))
+        print ('Sever id: ' + str(sever.id) +'; localMem:' + str(sever.availMem) + '; mce:' + str(sever.mce))
         for task in sever.server_runningTasks:
             print ('Task id: '+ str(task.id)+'; memory:'+str(task.memory)+'; localMem:'+str(task.localMem)+'; mce:'+str(task.mce)+'; hfm:'+str(task.hfm))
 
@@ -418,21 +448,29 @@ def oracle_allocateTasks(taskList, cluster):
 def worst_match(cluster):
     print ()
     for s in cluster.servers:
-        if s.mce == s.localMem:
+        # 我们已经把mce理解为内存潜力，如果一个server的内存潜力和它当前的availMem相等，说明它上面的task已经没有任何潜力了。
+        if s.mce == s.availMem:
+            # 这里needMem理解为一个task恢复成full mem所需要的内存数量。
             needMem = 0
             for task in s.server_runningTasks:
+                # 把这些信息统计起来。
                 needMem = needMem + task.memory - task.localMem
-            if needMem > s.localMem:  # localmem可以都分出去，不会出现task已经fullmem了
-                transfer_Mem = s.localMem / len(s.server_runningTasks)
+
+            if needMem > s.availMem:  # availMem可以都分出去，不会出现task已经fullmem了
+                # 均分？比如如果needMem > s.availMem，说明能分的只有s.availMem，所以把它均分了。
+                transfer_Mem = s.availMem / len(s.server_runningTasks)
             else:
                 transfer_Mem = needMem / len(s.server_runningTasks)
+
+            # 其实就是找一个server，因为当前task都已经是最佳状态(最小local mem)，所以我们要把它的最佳状态打破，让它退化。
             for task in s.server_runningTasks:
+                # 把均分到的内存分给task的localMem
                 task.localMem = task.localMem + transfer_Mem
-                s.localMem = s.localMem - transfer_Mem
+                s.availMem = s.availMem - transfer_Mem
                 task.updateMCE()
             s.updateMCE()
     for sever in cluster.servers:
-        print ('Sever id: '+ str(sever.id)+'; localMem:'+str(sever.localMem)+'; mce:'+str(sever.mce))
+        print ('Sever id: ' + str(sever.id) +'; availMem:' + str(sever.availMem) + '; mce:' + str(sever.mce))
         for task in sever.server_runningTasks:
             print ('Task id: '+ str(task.id)+'; memory:'+str(task.memory)+'; localMem:'+str(task.localMem)+'; mce:'+str(task.mce))
         print ()
@@ -444,18 +482,18 @@ def oracle_match(cluster):
         for task in s.server_runningTasks:
             needMem = needMem+task.memory-task.localMem
 
-        if needMem>s.localMem: #localmem可以都分出去，不会出现task已经fullmem了
-            transfer_Mem = s.localMem / len(s.server_runningTasks)
+        if needMem>s.availMem: #localmem可以都分出去，不会出现task已经fullmem了
+            transfer_Mem = s.availMem / len(s.server_runningTasks)
         else:
             transfer_Mem = needMem / len(s.server_runningTasks)
         for task in s.server_runningTasks:
             task.localMem = task.localMem+transfer_Mem
-            s.localMem = s.localMem - transfer_Mem
+            s.availMem = s.availMem - transfer_Mem
             task.updateMCE()
         s.updateMCE()
 
     for sever in cluster.servers:
-        print ('Sever id: '+ str(sever.id)+'; localMem:'+str(sever.localMem)+'; mce:'+str(sever.mce))
+        print ('Sever id: ' + str(sever.id) +'; localMem:' + str(sever.availMem) + '; mce:' + str(sever.mce))
         for task in sever.server_runningTasks:
             print ('Task id: '+ str(task.id)+'; memory:'+str(task.memory)+'; localMem:'+str(task.localMem)+'; mce:'+str(task.mce) +'; hfm:'+str(task.hfm))
         print ()
@@ -493,25 +531,30 @@ def ratio_according2fixedmce(tasks):
 def worst_inner(cluster):
     print ()
     for s in cluster.servers:
-        if s.mce == s.localMem:
+        # 找一个所有task已经压榨完了的server(上面的task都以最小local mem在运行)
+        if s.mce == s.availMem:
+            # 统计这些task“退化”所需的总内存
             needMem = 0
             for task in s.server_runningTasks:
-                needMem = needMem + task.memory - task.localMem
-            if needMem > s.localMem:  # localmem可以都分出去，不会出现task已经fullmem了
-                transfer_Mem = s.localMem / len(s.server_runningTasks)
+                needMem = needMem + task.memory - task.localMem #把localMem减去，这是只剩remoteMem
+
+            if needMem > s.availMem:  # localmem可以都分出去，不会出现task已经fullmem了
+                #ccy:needMem如果是remoteMem的话，大于s.localMeme
+                transfer_Mem = s.availMem / len(s.server_runningTasks)
             else:
                 transfer_Mem = needMem / len(s.server_runningTasks)
+
             # transfer_Mem = s.localMem
             ratio = ratio_according2fixedmce(s.server_runningTasks)
             i = 0
             for task in s.server_runningTasks:
                 task.localMem = task.localMem+ transfer_Mem*ratio[i]
-                s.localMem = s.localMem - transfer_Mem*ratio[i]
+                s.availMem = s.availMem - transfer_Mem * ratio[i]
                 task.updateMCE()
                 i = i+1
             s.updateMCE()
     for sever in cluster.servers:
-        print ('Sever id: '+ str(sever.id)+'; localMem:'+str(sever.localMem)+'; mce:'+str(sever.mce))
+        print ('Sever id: ' + str(sever.id) +'; localMem:' + str(sever.availMem) + '; mce:' + str(sever.mce))
         for task in sever.server_runningTasks:
             print ('Task id: '+ str(task.id)+'; memory:'+str(task.memory)+'; localMem:'+str(task.localMem)+'; mce:'+str(task.mce))
         print ()
@@ -523,22 +566,22 @@ def oracle_inner(cluster):
         needMem = 0
         for task in s.server_runningTasks:
             needMem = needMem + task.memory - task.localMem
-        if needMem > s.localMem:# localmem可以都分出去，不会出现task已经fullmem了
-            transfer_Mem = s.localMem
+        if needMem > s.availMem:# localmem可以都分出去，不会出现task已经fullmem了
+            transfer_Mem = s.availMem
         else:# localmem不可以都分出去，会出现task已经fullmem了
             transfer_Mem = needMem
         ratio = ratio_according2fixedmce(s.server_runningTasks)
         i = 0
         for task in s.server_runningTasks:
             task.localMem = task.localMem+ transfer_Mem*ratio[i]
-            s.localMem = s.localMem - transfer_Mem*ratio[i]
+            s.availMem = s.availMem - transfer_Mem * ratio[i]
             task.updateMCE()
             i = i+1
         s.updateMCE()
 
 
     for sever in cluster.servers:
-        print ('Sever id: '+ str(sever.id)+'; localMem:'+str(sever.localMem)+'; mce:'+str(sever.mce))
+        print ('Sever id: ' + str(sever.id) +'; localMem:' + str(sever.availMem) + '; mce:' + str(sever.mce))
         for task in sever.server_runningTasks:
             print ('Task id: '+ str(task.id)+'; memory:'+str(task.memory)+'; localMem:'+str(task.localMem)+'; mce:'+str(task.mce) )
         print ()
@@ -562,11 +605,11 @@ def worst_inter(worst_inner_cluster):
             s.updateMCE()
         else: # 转出mem
             s.farMem = ave_mce - s.mce # 负值
-            if s.localMem > -1*s.farMem: # 空闲的mem就够了
-                s.localMem = s.localMem + s.farMem
+            if s.availMem > -1*s.farMem: # 空闲的mem就够了
+                s.availMem = s.availMem + s.farMem
             else: # 空闲的mem不够了
-                s.localMem = 0
-                transfer_FarMem = s.farMem +s.localMem
+                s.availMem = 0
+                transfer_FarMem = s.farMem +s.availMem
                 all_mce = 0
                 for task in s.server_runningTasks:
                     all_mce = all_mce + task.mce
@@ -577,7 +620,7 @@ def worst_inter(worst_inner_cluster):
             s.updateMCE()
 
     for sever in worst_inner_cluster.servers:
-        print ('Sever id: '+ str(sever.id)+'; localMem:'+str(sever.localMem)+'; farMem:'+str(sever.farMem)+'; mce:'+str(sever.mce))
+        print ('Sever id: ' + str(sever.id) +'; localMem:' + str(sever.availMem) + '; farMem:' + str(sever.farMem) + '; mce:' + str(sever.mce))
         for task in sever.server_runningTasks:
             print ('Task id: '+ str(task.id)+'; memory:'+str(task.memory)+'; localMem:'+str(task.localMem)+'; farMem:'+str(task.farMem)+'; mce:'+str(task.mce)+'; est_latency:'+str(task.estimate_latency_by_profile()))
         print ()
@@ -602,11 +645,11 @@ def oracle_inter(oracle_inner_cluster):
             s.updateMCE()
         else: # 转出mem
             s.farMem = ave_mce - s.mce # 负值
-            if s.localMem > -1*s.farMem: # 空闲的mem就够了
-                s.localMem = s.localMem + s.farMem
+            if s.availMem > -1*s.farMem: # 空闲的mem就够了
+                s.availMem = s.availMem + s.farMem
             else: # 空闲的mem不够了
-                s.localMem = 0
-                transfer_FarMem = s.farMem +s.localMem
+                s.availMem = 0
+                transfer_FarMem = s.farMem +s.availMem
                 all_mce = 0
                 for task in s.server_runningTasks:
                     all_mce = all_mce + task.mce
@@ -617,7 +660,7 @@ def oracle_inter(oracle_inner_cluster):
             s.updateMCE()
 
     for sever in oracle_inner_cluster.servers:
-        print ('Sever id: '+ str(sever.id)+'; localMem:'+str(sever.localMem)+'; farMem:'+str(sever.farMem)+'; mce:'+str(sever.mce))
+        print ('Sever id: ' + str(sever.id) +'; localMem:' + str(sever.availMem) + '; farMem:' + str(sever.farMem) + '; mce:' + str(sever.mce))
         for task in sever.server_runningTasks:
             print ('Task id: '+ str(task.id)+'; memory:'+str(task.memory)+'; localMem:'+str(task.localMem)+'; farMem:'+str(task.farMem)+'; mce:'+str(task.mce) +'; est_latency:'+str(task.estimate_latency_by_profile()))
         print ()
@@ -713,7 +756,7 @@ if __name__ == '__main__':
     cluster = creatCluster()
     # waitingTasks = taskGenerator(tasknum)
     #waitingTasks = realTaskGenerator()
-    waitingTasks = realTaskGeneratorN(tasknum)
+    waitingTasks = realTaskGeneratorN(tasknum) #default tasknum is 2000
 
     print ('--------------------------------- worst allocate Start-----------------------------------------------')
     worst_allocate_cluster = copy.deepcopy(cluster)
@@ -734,6 +777,7 @@ if __name__ == '__main__':
 
     print ('--------------------------------- Oracle allocate Start-----------------------------------------------')
     oracle_allocate_cluster = copy.deepcopy(cluster)
+    # 这把task按最好的方式分配给cluster里的各个server
     oracle_allocateTasks(waitingTasks, oracle_allocate_cluster)
 
     print ('--------------------------------- Oracle Match Start-----------------------------------------------')

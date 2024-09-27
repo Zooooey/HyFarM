@@ -2,14 +2,18 @@ import Task
 MAX_MEMORY = 20000
 MAX_SSD = 2000000
 class Server:
+    #Server id
     id = 0
-    localMem = MAX_MEMORY  #avalible Memory
+
+    # Available memory for this server
+    availMem = MAX_MEMORY  #currently avalible memory
 
     #farMem = 0
     farMemSever = 0
-    ssd = MAX_MEMORY  #avalible SSD
+    ssd = MAX_MEMORY  #currently avalible SSD
 
     server_runningTasks = []  #taskId => Task()
+    #TODO:what is mce?
     mce = 0.0
     least_mce_task = 0
     task_mce_list = [0.0]
@@ -17,7 +21,7 @@ class Server:
 
     def __init__(self, id, memory, ssd):
         self.id = id
-        self.localMem = memory
+        self.availMem = memory
         self.ssd = ssd
         self.mce = memory
         self.server_runningTasks = []
@@ -27,12 +31,14 @@ class Server:
         self.farMem = 0
         self.farMemSever = 0
 
+    # append task instance into array 'server_runningTasks'
+
     def addTask(self, task, taskMem):
         self.server_runningTasks.append(task)
         task.localServer = self.id
         #task.updateMem(taskMem)
-        if self.localMem >0 :
-            self.localMem = self.localMem -taskMem
+        if self.availMem >0 :
+            self.availMem = self.availMem - taskMem
             self.ssd = self.ssd - task.ssd
         else:
             print("server " + repr(self.id) +" has no space" )
@@ -41,18 +47,18 @@ class Server:
 
     def resetTask(self, taskId, task, memory, ssd):
         self.server_runningTasks[taskId] = task
-        self.localMem += memory
+        self.availMem += memory
         self.ssd += ssd
         self.updateMCE()
 
     def finishTask(self, taskId):
-        self.localMem = self.localMem + self.runningTasks[taskId].localMem
+        self.availMem = self.availMem + self.runningTasks[taskId].availMem
         self.ssd = self.ssd + self.runningTasks[taskId].ssd
         del self.server_runningTasks[taskId]
         self.updateMCE()
 
     def finishFarTask(self, farMem):
-        self.localMem = self.localMem + farMem
+        self.availMem = self.availMem + farMem
 
     # def getMaxMCEtask(self):
     #     maxMCE = -float('inf')
@@ -65,9 +71,14 @@ class Server:
 
     #TODO  
     def updateMCE(self):
-        self.mce = self.localMem
+        """
+        server的mce等于其当前avial mem和所有task的mce的累加。可以理解为内存潜力,经过处理后可以空出来的内存量。
+        :return:
+        """
+        self.mce = self.availMem
         for task in self.server_runningTasks:
             tmce = task.mce
+            # FIXME: 这个不清空不会越加越多吗？
             self.task_mce_list.append(tmce)
             self.mce =self.mce + tmce
         # if (len(self.server_runningTasks)== 0):
